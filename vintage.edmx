@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Database1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="categori">
+          <Key>
+            <PropertyRef Name="cat_id" />
+          </Key>
+          <Property Name="cat_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cat_name" Type="nchar" MaxLength="10" />
+          <Property Name="mus_id" Type="int" />
+        </EntityType>
+        <EntityType Name="musteriler">
+          <Key>
+            <PropertyRef Name="mus_id" />
+          </Key>
+          <Property Name="mus_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="mus_adsoy" Type="nchar" MaxLength="10" />
+          <Property Name="mus_tel" Type="nchar" MaxLength="10" />
+          <Property Name="urun_id" Type="int" />
+        </EntityType>
+        <EntityType Name="urunler">
+          <Key>
+            <PropertyRef Name="urun_id" />
+          </Key>
+          <Property Name="urun_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="urun_ad" Type="nchar" MaxLength="10" />
+          <Property Name="urun_yıl" Type="int" />
+          <Property Name="cat_id" Type="int" />
+        </EntityType>
+        <Association Name="categor">
+          <End Role="categori" Type="Self.categori" Multiplicity="0..1" />
+          <End Role="urunler" Type="Self.urunler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categori">
+              <PropertyRef Name="cat_id" />
+            </Principal>
+            <Dependent Role="urunler">
+              <PropertyRef Name="cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tomus">
+          <End Role="musteriler" Type="Self.musteriler" Multiplicity="0..1" />
+          <End Role="categori" Type="Self.categori" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="musteriler">
+              <PropertyRef Name="mus_id" />
+            </Principal>
+            <Dependent Role="categori">
+              <PropertyRef Name="mus_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tourun">
+          <End Role="urunler" Type="Self.urunler" Multiplicity="0..1" />
+          <End Role="musteriler" Type="Self.musteriler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="urunler">
+              <PropertyRef Name="urun_id" />
+            </Principal>
+            <Dependent Role="musteriler">
+              <PropertyRef Name="urun_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Database1ModelStoreContainer">
+          <EntitySet Name="categori" EntityType="Self.categori" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="musteriler" EntityType="Self.musteriler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="urunler" EntityType="Self.urunler" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="categor" Association="Self.categor">
+            <End Role="categori" EntitySet="categori" />
+            <End Role="urunler" EntitySet="urunler" />
+          </AssociationSet>
+          <AssociationSet Name="tomus" Association="Self.tomus">
+            <End Role="musteriler" EntitySet="musteriler" />
+            <End Role="categori" EntitySet="categori" />
+          </AssociationSet>
+          <AssociationSet Name="tourun" Association="Self.tourun">
+            <End Role="urunler" EntitySet="urunler" />
+            <End Role="musteriler" EntitySet="musteriler" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Database1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="categori">
+          <Key>
+            <PropertyRef Name="cat_id" />
+          </Key>
+          <Property Name="cat_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cat_name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="mus_id" Type="Int32" />
+          <NavigationProperty Name="urunler" Relationship="Self.categor" FromRole="categori" ToRole="urunler" />
+          <NavigationProperty Name="musteriler" Relationship="Self.tomus" FromRole="categori" ToRole="musteriler" />
+        </EntityType>
+        <EntityType Name="musteriler">
+          <Key>
+            <PropertyRef Name="mus_id" />
+          </Key>
+          <Property Name="mus_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="mus_adsoy" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="mus_tel" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="urun_id" Type="Int32" />
+          <NavigationProperty Name="categori" Relationship="Self.tomus" FromRole="musteriler" ToRole="categori" />
+          <NavigationProperty Name="urunler" Relationship="Self.tourun" FromRole="musteriler" ToRole="urunler" />
+        </EntityType>
+        <EntityType Name="urunler">
+          <Key>
+            <PropertyRef Name="urun_id" />
+          </Key>
+          <Property Name="urun_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="urun_ad" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="urun_yıl" Type="Int32" />
+          <Property Name="cat_id" Type="Int32" />
+          <NavigationProperty Name="categori" Relationship="Self.categor" FromRole="urunler" ToRole="categori" />
+          <NavigationProperty Name="musteriler" Relationship="Self.tourun" FromRole="urunler" ToRole="musteriler" />
+        </EntityType>
+        <Association Name="categor">
+          <End Role="categori" Type="Self.categori" Multiplicity="0..1" />
+          <End Role="urunler" Type="Self.urunler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categori">
+              <PropertyRef Name="cat_id" />
+            </Principal>
+            <Dependent Role="urunler">
+              <PropertyRef Name="cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tomus">
+          <End Role="musteriler" Type="Self.musteriler" Multiplicity="0..1" />
+          <End Role="categori" Type="Self.categori" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="musteriler">
+              <PropertyRef Name="mus_id" />
+            </Principal>
+            <Dependent Role="categori">
+              <PropertyRef Name="mus_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tourun">
+          <End Role="urunler" Type="Self.urunler" Multiplicity="0..1" />
+          <End Role="musteriler" Type="Self.musteriler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="urunler">
+              <PropertyRef Name="urun_id" />
+            </Principal>
+            <Dependent Role="musteriler">
+              <PropertyRef Name="urun_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Database1Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="categori" EntityType="Self.categori" />
+          <EntitySet Name="musteriler" EntityType="Self.musteriler" />
+          <EntitySet Name="urunler" EntityType="Self.urunler" />
+          <AssociationSet Name="categor" Association="Self.categor">
+            <End Role="categori" EntitySet="categori" />
+            <End Role="urunler" EntitySet="urunler" />
+          </AssociationSet>
+          <AssociationSet Name="tomus" Association="Self.tomus">
+            <End Role="musteriler" EntitySet="musteriler" />
+            <End Role="categori" EntitySet="categori" />
+          </AssociationSet>
+          <AssociationSet Name="tourun" Association="Self.tourun">
+            <End Role="urunler" EntitySet="urunler" />
+            <End Role="musteriler" EntitySet="musteriler" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Database1ModelStoreContainer" CdmEntityContainer="Database1Entities">
+          <EntitySetMapping Name="categori">
+            <EntityTypeMapping TypeName="Database1Model.categori">
+              <MappingFragment StoreEntitySet="categori">
+                <ScalarProperty Name="cat_id" ColumnName="cat_id" />
+                <ScalarProperty Name="cat_name" ColumnName="cat_name" />
+                <ScalarProperty Name="mus_id" ColumnName="mus_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="musteriler">
+            <EntityTypeMapping TypeName="Database1Model.musteriler">
+              <MappingFragment StoreEntitySet="musteriler">
+                <ScalarProperty Name="mus_id" ColumnName="mus_id" />
+                <ScalarProperty Name="mus_adsoy" ColumnName="mus_adsoy" />
+                <ScalarProperty Name="mus_tel" ColumnName="mus_tel" />
+                <ScalarProperty Name="urun_id" ColumnName="urun_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="urunler">
+            <EntityTypeMapping TypeName="Database1Model.urunler">
+              <MappingFragment StoreEntitySet="urunler">
+                <ScalarProperty Name="urun_id" ColumnName="urun_id" />
+                <ScalarProperty Name="urun_ad" ColumnName="urun_ad" />
+                <ScalarProperty Name="urun_yıl" ColumnName="urun_yıl" />
+                <ScalarProperty Name="cat_id" ColumnName="cat_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
